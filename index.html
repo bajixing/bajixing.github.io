@@ -117,10 +117,216 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://bajixing.github.io/2021/09/21/hello-world/" data-id="ckttxgqrj0000jwu5ae9za2hw" data-title="Hello World" class="article-share-link">分享</a>
+      <a data-url="https://bajixing.github.io/2021/09/21/hello-world/" data-id="ckttzdoua00005su5dtnm95dd" data-title="Hello World" class="article-share-link">分享</a>
       
       
       
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-最长公共子序列" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/03/15/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/" class="article-date">
+  <time class="dt-published" datetime="2020-03-15T14:16:53.000Z" itemprop="datePublished">2020-03-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/arithmetic/">arithmetic</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2020/03/15/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/">最长公共子序列</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="最长公共子序列问题"><a href="#最长公共子序列问题" class="headerlink" title="最长公共子序列问题"></a>最长公共子序列问题</h3><h4 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h4><p>给定两个字符串s<del>1</del>s<del>2</del>s<del>3</del>…s<del>n</del>和t<del>1</del>t<del>2</del>t<del>3</del>…t<del>m</del>，求出这两个字符串最长的公共子序列（LCS,longest Common Subsequence  最长公共子序列问题）,例如</p>
+<p><strong>输入</strong><br>n = 4<br>m = 4<br>s = ‘abcd’<br>t = ‘becd’</p>
+<p><strong>输出：</strong><br>3（’bcd’)</p>
+<hr>
+<h4 id="解析："><a href="#解析：" class="headerlink" title="解析："></a>解析：</h4><p>定义：</p>
+<p><code>dp[i][j] := a1...ai和b1...b[j]的最长公共子序列LCS数</code></p>
+<p>由此，s<del>1</del>…s<del>i+1</del>和t<del>1</del>…t<del>m+1</del>的子序列可能是：</p>
+<ol>
+<li>当s<del>1+1</del>等于t<del>j+1</del>时，等于在si和tj公共列表后加s<del>i+1</del></li>
+<li>或者等于S<del>i+1</del>和t<del>j</del>之间的LCS</li>
+<li>或者等于s<del>i</del>和t<del>j+1</del>之间的LCS</li>
+</ol>
+<p>即可推出递推关系：</p>
+<p><code>dp[i+1][j+1] = dp[i][j] + 1 </code>  （第1点）</p>
+<p><code>dp[i+1][j+1] = max(dp[i+1][j],dp[i][j+1])</code> （2和3点）</p>
+<hr>
+<h4 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">n,m,a,b = <span class="number">5</span>,<span class="number">6</span>,<span class="string">&#x27;bcdef&#x27;</span>,<span class="string">&#x27;bcdevf&#x27;</span></span><br><span class="line">dp = [[<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(m+<span class="number">1</span>)] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DP</span>():</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">            <span class="keyword">if</span> a[i] == b[j]:</span><br><span class="line">                dp[i+<span class="number">1</span>][j+<span class="number">1</span>] = dp[i][j]+<span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[i+<span class="number">1</span>][j+<span class="number">1</span>] = <span class="built_in">max</span>(dp[i+<span class="number">1</span>][j],dp[i][j+<span class="number">1</span>])  <span class="comment">#没有匹配上的两种情况</span></span><br><span class="line">    <span class="built_in">print</span>(dp[n][m])</span><br><span class="line">DP()</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://bajixing.github.io/2020/03/15/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/" data-id="ckttzdoud00015su52eajb0sb" data-title="最长公共子序列" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-划分数问题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/03/13/%E5%88%92%E5%88%86%E6%95%B0%E9%97%AE%E9%A2%98/" class="article-date">
+  <time class="dt-published" datetime="2020-03-13T09:48:00.000Z" itemprop="datePublished">2020-03-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/arithmetic/">arithmetic</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2020/03/13/%E5%88%92%E5%88%86%E6%95%B0%E9%97%AE%E9%A2%98/">划分数问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h4 id="划分数问题"><a href="#划分数问题" class="headerlink" title="划分数问题"></a>划分数问题</h4><p><strong>有n个无区别的物品，将他们划分成不超过m组，求出划分方法数模M的余数。</strong><br><strong>输入:n,m,M = 4,3,10000</strong><br><strong>输出：4</strong></p>
+<p> 特别的，当m=n时，叫做n的划分数。通俗的讲就是一个正整数n可以划分成多少个正整数的和？</p>
+<p>我们可以这样定义：</p>
+<p><code>dp[i][j] := 把j划分成个数不超过i的方案总数</code></p>
+<p>为了不重复计算，我们把n的划分数归纳于一系列非负整数的集合ai,<br>$$<br>\sum_{i=1}^ma_i = n<br>$$<br>ai 的定义如上，列入4的3划分为{0,0,4},{0,1,3},{0,2,2},{1,1,2}，方案一{0,0,4}的a1,a2,a3分别是0,0,4，依次类推。</p>
+<p>可以看出，每个集合里面有m个数，但是不都全为正整数。</p>
+<p>所以我们可以将问题分成两类，一个是{ai}里面不包括0，一个是里面存在0。对于不存在0,将4的3划分数{1,1,2}作为例子，可以发现当里面的数个减去一，就变成了{0,0,1}，即1的3划分数，它们两个的个数是相同的。所以{ai-1}就对应了n-m的m划分就不难理解了，就是集合里的每个数减去一，一共减了m个。</p>
+<p><code>dp[i][j] = dp[i][j-i]</code></p>
+<p>对于存在0，就好比上面的{0,0,4},{0,1,3},{0,2,2},可以发现集合里面各去掉一个数就变成了{0,4},{1,3},{2,2}，即4的2划分。它们的个数是一样的。即</p>
+<p><code>dp[i][j] = dp[i-1][j]</code></p>
+<p><strong>总结：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">由此可以发现 dp[3][4] = dp[3][1] + dp[2][4]</span></span><br><span class="line"><span class="string">所以可以推出递推公式：</span></span><br><span class="line"><span class="string">dp[i][j] = dp[i][j-i] + dp[i-1][j]</span></span><br><span class="line"><span class="string">边界条件：dp[0][0] = 1</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>代码：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">有n个无区别的物品，将他们划分成不超过m组，求出划分方法数模M的余数</span></span><br><span class="line"><span class="string">输入:</span></span><br><span class="line"><span class="string">n,m,M = 4,3,10000</span></span><br><span class="line"><span class="string">输出：</span></span><br><span class="line"><span class="string">4</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">n,m,M = <span class="number">4</span>,<span class="number">3</span>,<span class="number">10000</span></span><br><span class="line">dp = [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(m+<span class="number">1</span>)]  <span class="comment">#用mxn列表记录j的i划分</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DP</span>():</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,m+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,n+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> j-i &gt;= <span class="number">0</span>:    </span><br><span class="line">                dp[i][j] = (dp[i-<span class="number">1</span>][j] + dp[i][j-i]) % M</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[i][j] = dp[i-<span class="number">1</span>][j]</span><br><span class="line">    <span class="built_in">print</span>(dp[m][n])</span><br><span class="line">DP()</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>同样的问题：n的划分数</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">一个正整数可以划分为多个正整数的和，比如n=3时：</span></span><br><span class="line"><span class="string">3；1＋2；1＋1＋1；</span></span><br><span class="line"><span class="string">共有三种划分方法。</span></span><br><span class="line"><span class="string">给出一个正整数，问有多少种划分方法。</span></span><br><span class="line"><span class="string">数据规模和约定</span></span><br><span class="line"><span class="string">n&lt; =100</span></span><br><span class="line"><span class="string">样例输入</span></span><br><span class="line"><span class="string">3</span></span><br><span class="line"><span class="string">样例输出</span></span><br><span class="line"><span class="string">3</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">n = <span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line">dp = [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DP</span>():</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,n+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,n+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> j - i &gt;= <span class="number">0</span>:</span><br><span class="line">                dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-i]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[i][j] = dp[i-<span class="number">1</span>][j]</span><br><span class="line">    <span class="built_in">print</span>(dp[n][n])</span><br><span class="line">DP()</span><br></pre></td></tr></table></figure>
+
+
+
+<p>思维图：</p>
+<p><img src=".%5C%E5%88%92%E5%88%86%E6%95%B0%E9%97%AE%E9%A2%98%5C%E6%95%B0%E7%9A%84%E5%88%92%E5%88%86.jpg"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://bajixing.github.io/2020/03/13/%E5%88%92%E5%88%86%E6%95%B0%E9%97%AE%E9%A2%98/" data-id="ckttzdoug00055su576gt8g8w" data-title="划分数问题" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-0-1背包问题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/03/02/0-1%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="article-date">
+  <time class="dt-published" datetime="2020-03-02T14:22:30.000Z" itemprop="datePublished">2020-03-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/arithmetic/">arithmetic</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2020/03/02/0-1%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/">0-1背包问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="0-1背包问题"><a href="#0-1背包问题" class="headerlink" title="0-1背包问题"></a>0-1背包问题</h3><p>有n个重量和价值分别为w<del>i</del>、v<del>i</del>的物品，从这些物品中挑选出总重量不超过W的物品，求所有挑选方案中价值总和的最大值。</p>
+<hr>
+<h4 id="穷竭搜索（DFS-递归）"><a href="#穷竭搜索（DFS-递归）" class="headerlink" title="穷竭搜索（DFS+递归）"></a>穷竭搜索（DFS+递归）</h4><p>其实这就像深度优先遍历搜索一样，每件物品有两种状态–拿或不拿，确定每个物品的状态转移函数如下：</p>
+<p><code>f(i,j),表示从第i件物品挑选出总重量不超过j的物品的最大和价值</code></p>
+<p><code>f(i,j) =  f(i+1,j) (j&lt;w[i]</code>   第i件物品重量大于剩余重量，表示不能选取此物品）<br>                      <code>max(f(i+1,j),f(i+1,j-w[i])+v[i])</code>   （此物品可选，但是否选取由谁的价值大决定）</p>
+<p><strong>代码：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">n,W = <span class="number">4</span>,<span class="number">5</span></span><br><span class="line">w,v = [<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">2</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">record</span>(<span class="params">i,j</span>):</span></span><br><span class="line">    res = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> i == n:</span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">    <span class="keyword">elif</span> j &lt; w[i]:</span><br><span class="line">        res = record(i+<span class="number">1</span>,j)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        res = <span class="built_in">max</span>(record(i+<span class="number">1</span>,j),record(i+<span class="number">1</span>,j-w[i])+v[i])</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"><span class="built_in">print</span>(record(<span class="number">0</span>,W))</span><br></pre></td></tr></table></figure>
+
+<p>不足：通过画深度优先遍历的图来看可以发现有重复计算的值，最坏需要O(2^n^)的时间</p>
+<hr>
+<h4 id="记忆化搜索"><a href="#记忆化搜索" class="headerlink" title="记忆化搜索"></a>记忆化搜索</h4><p>在进行DFS遍历每个数的时用一个二维列表记录，下次遇到同样的数字即可直接调用，只需O(n*w)的复杂度。</p>
+<p><strong>代码：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">n,W = <span class="number">4</span>,<span class="number">5</span></span><br><span class="line">w,v = [<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">2</span>]</span><br><span class="line">d = [[-<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(W+<span class="number">1</span>)] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)] <span class="comment">#-1表示标记</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">record</span>(<span class="params">i,j</span>):</span></span><br><span class="line">    res = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> d[i][j] &gt;= <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> d[i][j]</span><br><span class="line">    <span class="keyword">elif</span> i == n:</span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">    <span class="keyword">elif</span> j &lt; w[i]:</span><br><span class="line">        res = record(i+<span class="number">1</span>,j)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        res = <span class="built_in">max</span>(record(i+<span class="number">1</span>,j),record(i+<span class="number">1</span>,j-w[i])+v[i])</span><br><span class="line">    d[i][j] = res</span><br><span class="line">    <span class="keyword">return</span> d[i][j]</span><br><span class="line"><span class="built_in">print</span>(record(<span class="number">0</span>,W))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h4><p>二维列表dp根据状态转移函数的定义可以变化成如下递推公式：</p>
+<p><code>dp[n][j]= 0</code></p>
+<p><code>dp[i][j] =  dp[i+1][j]  (j&lt;w[i])</code></p>
+<p><code>                max(dp[i+1][j]+ dp[i+1][j-w[i]]+v[i])</code>  其他</p>
+<p><strong>代码：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">n,W = <span class="number">4</span>,<span class="number">5</span></span><br><span class="line">w,v = [<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">2</span>]</span><br><span class="line">dp = [[-<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(W+<span class="number">1</span>)] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line"><span class="comment">#初始化dp[n][j] = 0</span></span><br><span class="line"><span class="keyword">for</span> index <span class="keyword">in</span> <span class="built_in">range</span>(W+<span class="number">1</span>):</span><br><span class="line">    dp[n][index] = <span class="number">0</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DP</span>():</span></span><br><span class="line">    i = n-<span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> i &gt;= <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(W+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> j &lt; w[i]:</span><br><span class="line">                dp[i][j] = dp[i+<span class="number">1</span>][j]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[i][j] = <span class="built_in">max</span>(dp[i+<span class="number">1</span>][j],dp[i+<span class="number">1</span>][j-w[i]]+v[i])</span><br><span class="line">                <span class="built_in">print</span>(dp[i][j])</span><br><span class="line">        i -= <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(dp[<span class="number">0</span>][W])</span><br><span class="line">DP()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="正向递推"><a href="#正向递推" class="headerlink" title="正向递推"></a>正向递推</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">正向递推，上面的方法是逆推的，dp[i+1][j] = 从前i个物品中挑选出总重量不超过j的物品的价值和的最大值</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">n,W = <span class="number">4</span>,<span class="number">5</span></span><br><span class="line">w,v = [<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">2</span>]</span><br><span class="line">dp = [[-<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(W+<span class="number">1</span>)] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line"><span class="keyword">for</span> index <span class="keyword">in</span> <span class="built_in">range</span>(W+<span class="number">1</span>):</span><br><span class="line">    dp[<span class="number">0</span>][index] = <span class="number">0</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DP</span>():</span></span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; n:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(W+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> j &lt; w[i]:</span><br><span class="line">                dp[i+<span class="number">1</span>][j] = dp[i][j]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[i+<span class="number">1</span>][j] = <span class="built_in">max</span>(dp[i][j],dp[i][j-w[i]]+v[i])</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(dp[n][W])</span><br><span class="line">DP()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="改进-dp数组再利用"><a href="#改进-dp数组再利用" class="headerlink" title="改进:dp数组再利用"></a>改进:dp数组再利用</h4><p>改进，0-1背包问题只用一个数组完成，与上面的只是J控制时遍历的方向不同</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">n,W = <span class="number">4</span>,<span class="number">5</span></span><br><span class="line">w,v = [<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">2</span>]</span><br><span class="line">dp = [<span class="number">0</span>]*(n*W)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DP</span>():</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        j = W</span><br><span class="line">        <span class="keyword">while</span> j &gt;= w[i]:</span><br><span class="line">            dp[j] = <span class="built_in">max</span>(dp[j],dp[j - w[i]] + v[i])</span><br><span class="line">            j -= <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(dp[W])</span><br><span class="line">DP()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://bajixing.github.io/2020/03/02/0-1%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" data-id="ckttzdoue00025su57ksd9dff" data-title="0-1背包问题" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" rel="tag">背包问题</a></li></ul>
+
     </footer>
   </div>
   
@@ -561,7 +767,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://bajixing.github.io/2019/11/16/python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-id="ckttxgqro0001jwu5hi2b8w2r" data-title="python学习笔记" class="article-share-link">分享</a>
+      <a data-url="https://bajixing.github.io/2019/11/16/python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-id="ckttzdour000i5su5gtyedv0r" data-title="python学习笔记" class="article-share-link">分享</a>
       
       
       
@@ -585,7 +791,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/arithmetic/">arithmetic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li></ul>
     </div>
   </div>
 
@@ -595,7 +801,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" rel="tag">背包问题</a></li></ul>
     </div>
   </div>
 
@@ -605,7 +811,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/python/" style="font-size: 10px;">python</a>
+      <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 20px;">动态规划</a> <a href="/tags/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" style="font-size: 10px;">背包问题</a>
     </div>
   </div>
 
@@ -614,7 +820,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li></ul>
     </div>
   </div>
 
@@ -628,6 +834,18 @@
         
           <li>
             <a href="/2021/09/21/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/15/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/">最长公共子序列</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/13/%E5%88%92%E5%88%86%E6%95%B0%E9%97%AE%E9%A2%98/">划分数问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/02/0-1%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/">0-1背包问题</a>
           </li>
         
           <li>

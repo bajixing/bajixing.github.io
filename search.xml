@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>划分数问题</title>
+    <url>/2020/03/13/%E5%88%92%E5%88%86%E6%95%B0%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h4 id="划分数问题"><a href="#划分数问题" class="headerlink" title="划分数问题"></a>划分数问题</h4><p><strong>有n个无区别的物品，将他们划分成不超过m组，求出划分方法数模M的余数。</strong><br><strong>输入:n,m,M = 4,3,10000</strong><br><strong>输出：4</strong></p>
+<p> 特别的，当m=n时，叫做n的划分数。通俗的讲就是一个正整数n可以划分成多少个正整数的和？</p>
+<p>我们可以这样定义：</p>
+<p><code>dp[i][j] := 把j划分成个数不超过i的方案总数</code></p>
+<p>为了不重复计算，我们把n的划分数归纳于一系列非负整数的集合ai,<br>$$<br>\sum_{i=1}^ma_i = n<br>$$<br>ai 的定义如上，列入4的3划分为{0,0,4},{0,1,3},{0,2,2},{1,1,2}，方案一{0,0,4}的a1,a2,a3分别是0,0,4，依次类推。</p>
+<p>可以看出，每个集合里面有m个数，但是不都全为正整数。</p>
+<p>所以我们可以将问题分成两类，一个是{ai}里面不包括0，一个是里面存在0。对于不存在0,将4的3划分数{1,1,2}作为例子，可以发现当里面的数个减去一，就变成了{0,0,1}，即1的3划分数，它们两个的个数是相同的。所以{ai-1}就对应了n-m的m划分就不难理解了，就是集合里的每个数减去一，一共减了m个。</p>
+<p><code>dp[i][j] = dp[i][j-i]</code></p>
+<p>对于存在0，就好比上面的{0,0,4},{0,1,3},{0,2,2},可以发现集合里面各去掉一个数就变成了{0,4},{1,3},{2,2}，即4的2划分。它们的个数是一样的。即</p>
+<p><code>dp[i][j] = dp[i-1][j]</code></p>
+<p><strong>总结：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">由此可以发现 dp[3][4] = dp[3][1] + dp[2][4]</span></span><br><span class="line"><span class="string">所以可以推出递推公式：</span></span><br><span class="line"><span class="string">dp[i][j] = dp[i][j-i] + dp[i-1][j]</span></span><br><span class="line"><span class="string">边界条件：dp[0][0] = 1</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>代码：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">有n个无区别的物品，将他们划分成不超过m组，求出划分方法数模M的余数</span></span><br><span class="line"><span class="string">输入:</span></span><br><span class="line"><span class="string">n,m,M = 4,3,10000</span></span><br><span class="line"><span class="string">输出：</span></span><br><span class="line"><span class="string">4</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">n,m,M = <span class="number">4</span>,<span class="number">3</span>,<span class="number">10000</span></span><br><span class="line">dp = [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(m+<span class="number">1</span>)]  <span class="comment">#用mxn列表记录j的i划分</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DP</span>():</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,m+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,n+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> j-i &gt;= <span class="number">0</span>:    </span><br><span class="line">                dp[i][j] = (dp[i-<span class="number">1</span>][j] + dp[i][j-i]) % M</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[i][j] = dp[i-<span class="number">1</span>][j]</span><br><span class="line">    <span class="built_in">print</span>(dp[m][n])</span><br><span class="line">DP()</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>同样的问题：n的划分数</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">一个正整数可以划分为多个正整数的和，比如n=3时：</span></span><br><span class="line"><span class="string">3；1＋2；1＋1＋1；</span></span><br><span class="line"><span class="string">共有三种划分方法。</span></span><br><span class="line"><span class="string">给出一个正整数，问有多少种划分方法。</span></span><br><span class="line"><span class="string">数据规模和约定</span></span><br><span class="line"><span class="string">n&lt; =100</span></span><br><span class="line"><span class="string">样例输入</span></span><br><span class="line"><span class="string">3</span></span><br><span class="line"><span class="string">样例输出</span></span><br><span class="line"><span class="string">3</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">n = <span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line">dp = [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DP</span>():</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,n+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,n+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> j - i &gt;= <span class="number">0</span>:</span><br><span class="line">                dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-i]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[i][j] = dp[i-<span class="number">1</span>][j]</span><br><span class="line">    <span class="built_in">print</span>(dp[n][n])</span><br><span class="line">DP()</span><br></pre></td></tr></table></figure>
+
+
+
+<p>思维图：</p>
+<p><img src=".%5C%E5%88%92%E5%88%86%E6%95%B0%E9%97%AE%E9%A2%98%5C%E6%95%B0%E7%9A%84%E5%88%92%E5%88%86.jpg"></p>
+]]></content>
+      <categories>
+        <category>arithmetic</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>0-1背包问题</title>
     <url>/2020/03/02/0-1%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h3 id="0-1背包问题"><a href="#0-1背包问题" class="headerlink" title="0-1背包问题"></a>0-1背包问题</h3><p>有n个重量和价值分别为w<del>i</del>、v<del>i</del>的物品，从这些物品中挑选出总重量不超过W的物品，求所有挑选方案中价值总和的最大值。</p>
